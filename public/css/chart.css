@@ -1,0 +1,290 @@
+/***** GRADIENTS FOR SQUARES *****/
+:root {
+
+  /* background color variables */
+  --colorBaseBg-h: 238 ;
+  --colorBaseBg-s: 50%;
+  --colorBaseBg-l: 66%;
+
+  /* square color variables */
+  --colorBase-h: 238 ;
+  --colorBase-s: 50%;
+  --colorBase-l: 66%;
+
+  /* DARK MODE TRANSFORM*/
+  --scale4DarkTransform: 15%;
+  --scale3DarkTransform: 0%;
+  --scale2DarkTransform: -20%;
+  --scale1DarkTransform: -30%;
+  
+  /* DARK MODE COLORS */
+  --colorBase: hsl(var(--colorBase-h), var(--colorBase-s), var(--colorBase-l));
+  --colorBase--scale4Dark-l: calc(var(--colorBase-l) + var(--scale4DarkTransform));
+  --colorBase--scale3Dark-l: calc(var(--colorBase-l) + var(--scale3DarkTransform));
+  --colorBase--scale2Dark-l: calc(var(--colorBase-l) + var(--scale2DarkTransform));
+  --colorBase--scale1Dark-l: calc(var(--colorBase-l) + var(--scale1DarkTransform));
+  --colorBase--scale0Dark-l: calc(var(--colorBase-l) + var(--scale0DarkTransform));
+
+  --colorBase--scale4Dark:hsl(var(--colorBase-h),
+  var(--colorBase-s),
+  var(--colorBase--scale4Dark-l));
+  --colorBase--scale3Dark:hsl(var(--colorBase-h),
+                       var(--colorBase-s),
+                       var(--colorBase--scale3Dark-l));
+  --colorBase--scale2Dark:hsl(var(--colorBase-h),
+                       var(--colorBase-s),
+                       var(--colorBase--scale2Dark-l));
+  --colorBase--scale1Dark:hsl(var(--colorBase-h),
+                       var(--colorBase-s),
+                       var(--colorBase--scale1Dark-l));
+  --colorBase--scale0Dark: #a2a4a2;
+  ;
+
+    /* LIGHT MODE TRANSFORM*/
+    --scale4LightTransform: 5%;
+    --scale3LightTransform: 12%;
+    --scale2LightTransform: 18%;
+    --scale1LightTransform: 27%;
+    
+    /* LIGHT MODE COLORS */
+    --colorBase: hsl(var(--colorBase-h), var(--colorBase-s), var(--colorBase-l));
+    --colorBase--scale4Light-l: calc(var(--colorBase-l) + var(--scale4LightTransform));
+    --colorBase--scale3Light-l: calc(var(--colorBase-l) + var(--scale3LightTransform));
+    --colorBase--scale2Light-l: calc(var(--colorBase-l) + var(--scale2LightTransform));
+    --colorBase--scale1Light-l: calc(var(--colorBase-l) + var(--scale1LightTransform));
+  
+    --colorBase--scale4Light:hsl(var(--colorBase-h),
+    var(--colorBase-s),
+    var(--colorBase--scale4Light-l));
+    --colorBase--scale3Light:hsl(var(--colorBase-h),
+                         var(--colorBase-s),
+                         var(--colorBase--scale3Light-l));
+    --colorBase--scale2Light:hsl(var(--colorBase-h),
+                         var(--colorBase-s),
+                         var(--colorBase--scale2Light-l));
+    --colorBase--scale1Light:hsl(var(--colorBase-h),
+                         var(--colorBase-s),
+                         var(--colorBase--scale1Light-l));
+    --colorBase--scale0Light: #e8e8e8;
+    ;
+}
+
+/***** General CSS *****/
+.darkMode {
+  background-color: #2f3437;
+  color: #ffffff;
+}
+
+.hide {
+  display: none;
+}
+
+.display {
+  display: block;
+}
+
+/***** Grid-related CSS *****/
+/* Article - https://bitsofco.de/github-contribution-graph-css-grid/ */
+
+:root {
+  --square-size: 15px;
+  --square-gap: 5px;
+  --week-width: calc(var(--square-size) + var(--square-gap));
+}
+
+.months {
+  grid-area: months;
+}
+.days {
+  grid-area: days;
+}
+.squares {
+  grid-area: squares;
+}
+
+.graph {
+  display: inline-grid;
+  grid-template-areas:
+    "empty months"
+    "days squares";
+  grid-template-columns: auto 1fr;
+  grid-gap: 4px;
+  padding: 20px;
+  margin: 20px;
+}
+
+.months {
+  display: grid;
+  grid-template-columns:
+    calc(var(--week-width) * 4) /* Jan */
+    calc(var(--week-width) * 4) /* Feb */
+    calc(var(--week-width) * 4) /* Mar */
+    calc(var(--week-width) * 5) /* Apr */
+    calc(var(--week-width) * 4) /* May */
+    calc(var(--week-width) * 4) /* Jun */
+    calc(var(--week-width) * 5) /* Jul */
+    calc(var(--week-width) * 4) /* Aug */
+    calc(var(--week-width) * 4) /* Sep */
+    calc(var(--week-width) * 5) /* Oct */
+    calc(var(--week-width) * 4) /* Nov */
+    calc(var(--week-width) * 5) /* Dec */;
+}
+
+.days,
+.squares {
+  display: grid;
+  grid-gap: var(--square-gap);
+  grid-template-rows: repeat(7, var(--square-size));
+}
+
+.squares {
+  grid-auto-flow: column;
+  grid-auto-columns: var(--square-size);
+}
+
+li {
+  list-style: none;
+}
+
+.days li:nth-child(odd) {
+  visibility: hidden;
+}
+
+.squares li {
+  border-radius: 2px;
+}
+.squares li[data-level="dark-0"] {
+  background-color: var(--colorBase--scale0Dark);
+}
+
+.squares li[data-level="dark-1"] {
+  background-color: var(--colorBase--scale1Dark);
+  box-shadow: inset 0 0 1px var(--colorBase--scale2Dark);;
+}
+
+.squares li[data-level="dark-2"] {
+  background-color: var(--colorBase--scale2Dark);
+  box-shadow: inset 0 0 1px var(--colorBase--scale3Dark);
+}
+
+.squares li[data-level="dark-3"] {
+  background-color: var(--colorBase--scale3Dark);
+}
+
+.squares li[data-level="dark-4"] {
+  background-color: var(--colorBase--scale4Dark);
+}
+
+.squares li[data-level="light-0"] {
+  background-color: var(--colorBase--scale0Light);
+  box-shadow: inset 0 0 2px var(--colorBase--scale1Light);;
+}
+
+.squares li[data-level="light-1"] {
+  background-color: var(--colorBase--scale1Light);
+  box-shadow: inset 0 0 1px var(--colorBase--scale2Light);;
+}
+
+.squares li[data-level="light-2"] {
+  background-color: var(--colorBase--scale2Light);
+  box-shadow: inset 0 0 1px var(--colorBase--scale3Light);
+}
+
+.squares li[data-level="light-3"] {
+  background-color: var(--colorBase--scale3Light);
+}
+
+.squares li[data-level="light-4"] {
+  background-color: var(--colorBase--scale4Light);
+}
+
+/* hover message */
+.show {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  color: #000000;
+  padding: 10px;
+  margin: 10px;
+  position: absolute;
+  left: 10px;
+  top: 20px;
+  opacity: 1;
+  z-index: 1;
+  pointer-events: none;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.showHoverPreview {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  color: #000000;
+  padding: 10px;
+  margin: 10px;
+}
+
+/***** Chart Color Preview CSS *****/
+.options {
+  display: grid;
+  grid-gap: 24px;
+  justify-content: center;
+  text-align: center;
+}
+
+.gradientSection {
+  border: 1px solid #cbcbcb;
+  padding: 25px;
+}
+
+.colorThemes {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 8px;
+  width: 100%;
+}
+
+.colorThemes .color {
+  padding: 10px;
+  text-align: center;
+  border-radius: 2px;
+}
+
+.colorThemes .color.scale4Dark {
+  background-color: var(--colorBase--scale4Dark);
+}
+
+.colorThemes .color.scale3Dark {
+  background-color: var(--colorBase--scale3Dark);
+}
+
+.colorThemes .color.scale2Dark {
+  background-color: var(--colorBase--scale2Dark);
+}
+
+.colorThemes .color.scale1Dark {
+  background-color: var(--colorBase--scale1Dark);
+}
+
+.colorThemes .color.scale0Dark {
+  background-color: var(--colorBase--scale0Dark);
+}
+
+.colorThemes .color.scale4Light {
+  background-color: var(--colorBase--scale4Light);
+}
+
+.colorThemes .color.scale3Light {
+  background-color: var(--colorBase--scale3Light);
+}
+
+.colorThemes .color.scale2Light {
+  background-color: var(--colorBase--scale2Light);
+}
+
+.colorThemes .color.scale1Light {
+  background-color: var(--colorBase--scale1Light);
+}
+
+.colorThemes .color.scale0Light {
+  background-color: var(--colorBase--scale0Light);
+}
+

@@ -1,0 +1,32 @@
+<%- include('partials/footer') -%>
+    <div class="container">
+      <div class="row mt-5">
+        <div class="col-6">
+          <div>
+            <p><strong>User Name</strong>: <%= user.userName %></p>
+            <p><strong>Email</strong>: <%= user.email %></p>
+            <a href="/logout" class="col-3 btn btn-primary">Logout</a>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <a href="/chart/addNewChart/lightMode" class="col-3 btn btn-primary">Add a Chart - Light Mode</a>
+          <a href="/chart/addNewChart/darkMode" class="col-3 btn btn-primary">Add a Chart - Dark Mode</a>
+
+          <h2>My Charts</h2>
+          <ul class="row list-unstyled">
+            <% for(let i=0; i < charts.length; i++) {%>
+            <li class="col-6 justify-content-between mt-5">
+              <a href="/chart/<%= charts[i]._id%>">
+                <h3><%= charts[i].chartName %></h3>
+              </a>
+            </li>
+            <% } %>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <%- include('partials/footer') -%>
+  </body>
+</html>
