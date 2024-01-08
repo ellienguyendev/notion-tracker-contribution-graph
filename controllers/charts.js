@@ -2,8 +2,6 @@ const { Client } = require("@notionhq/client");
 const Chart = require("../models/Chart");
 const Entry = require("../models/Entry");
 const { ObjectID } = require("mongodb");
-const ColorScheme = require("color-scheme");
-const convert = require('color-convert');
 
 module.exports = {
   getProfile: async (req, res) => {
@@ -27,8 +25,6 @@ module.exports = {
       const databaseId = chart.databaseId;
       const numberOfHabits = chart.numberOfHabits;
       const habitNames = chart.habitNames;
-      const dateProperty = chart.dateProperty;
-      const completedProperty = chart.completedProperty;
       const trackingName = chart.trackingName;
 
       const chartId = new ObjectID(req.params.id);
@@ -46,13 +42,13 @@ module.exports = {
         filter: {
           or: [
             {
-              property: "Month Filter",
+              property: "Month",
               select: {
                 equals: "November",
               },
             },
             {
-              property: "Month Filter",
+              property: "Month",
               select: {
                 equals: "October",
               },
@@ -72,8 +68,6 @@ module.exports = {
         notionResults,
         numberOfHabits,
         habitNames,
-        dateProperty,
-        completedProperty,
         trackingName
       );
 
@@ -94,10 +88,7 @@ module.exports = {
       let databaseId = req.body.databaseId;
       let numberOfHabits = Number(req.body.numberOfHabits);
       let habitNames = req.body.habitNames;
-      let chartColor = req.body.chartColor;
-      let dateProperty = req.body.dateProperty;
       let trackingName = req.body.trackingName.toLowerCase();
-      let completedProperty = req.body.completedProperty;
       let chartBackground = req.body.chartBackground;
 
       const newChart = await Chart.create({
@@ -110,9 +101,7 @@ module.exports = {
         chartColor: chartColor,
         chartMode: chartMode,
         chartBackground: chartBackground,
-        dateProperty: dateProperty,
         trackingName: trackingName,
-        completedProperty: completedProperty,
       });
 
       const chartId = newChart._id;
@@ -134,7 +123,7 @@ module.exports = {
         const data = await notion.databases.query({
           database_id: databaseId,
           filter: {
-            property: "Month Filter",
+            property: "Month",
             select: {
               equals: month,
             },
@@ -153,8 +142,6 @@ module.exports = {
           notionResults,
           numberOfHabits,
           habitNames,
-          dateProperty,
-          completedProperty,
           trackingName,
           chartId
         );
@@ -172,7 +159,7 @@ module.exports = {
           filter: {
             and: [
               {
-                property: "Month Filter",
+                property: "Month",
                 select: {
                   equals: currentMonth,
                 },
@@ -198,8 +185,6 @@ module.exports = {
           notionResultsForMonth,
           numberOfHabits,
           habitNames,
-          dateProperty,
-          completedProperty,
           trackingName,
           chartId
         );
@@ -221,8 +206,6 @@ function getEntries(
   notionResults,
   numberOfHabits,
   habitNames,
-  dateProperty,
-  completedProperty,
   trackingName,
   chartId = false
 ) {
@@ -232,10 +215,10 @@ function getEntries(
     let prop = el.properties;
 
     let percentage = Number(
-      prop[completedProperty].formula.string.split("%")[0]
+      prop["Completed"].formula.string.split("%")[0]
     );
 
-    let date = prop[dateProperty].date.start;
+    let date = prop["Date"].date.start;
 
     let dateObject = new Date(date);
 

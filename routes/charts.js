@@ -11,8 +11,6 @@ router.get("/addNewChart/:chartMode", ensureAuth, chartsController.getAddNewChar
 
 router.post("/createChart/:chartMode", chartsController.createChart);
 
-router.get("/getColorScheme/:color", chartsController.getColorScheme);
-
 // router.put("/likeChart/:id", chartsController.likeChart);
 
 // router.delete("/deleteChart/:id", chartsController.deleteChart);

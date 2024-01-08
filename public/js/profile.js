@@ -21,7 +21,7 @@ function addHabits() {
       let div = document.createElement("div");
 
       div.innerHTML = `<div class="habit" data-habitNumber="${i}">
-    <input type="text" name="habitNames" class="habitNames" placeholder="Habit ${i}: Must Match Property on Database"></div>`;
+    <input type="text" name="habitNames" class="habitNames form-control" placeholder="Property ${i}: Must Match Property Name in Database"></div>`;
 
       habits.appendChild(div);
     }
@@ -29,7 +29,6 @@ function addHabits() {
 }
 
 const newChartMode = document.querySelector(".newChartMode");
-console.log(newChartMode);
 
 const mode =
   newChartMode.getAttribute("data-newChartMode") === "lightMode"

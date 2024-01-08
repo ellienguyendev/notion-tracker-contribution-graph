@@ -25,14 +25,6 @@ const ChartSchema = new mongoose.Schema({
     type: Array,
     required: true
   },
-  dateProperty: {
-    type: String,
-    required: true
-  },
-  completedProperty: {
-    type: String,
-    required: true
-  },
   trackingName: {
     type: String,
     required: true

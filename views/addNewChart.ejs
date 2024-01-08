@@ -81,32 +81,10 @@
               </div>
 
               <div class="mb-3">
-                <label for="chartColor" class="form-label"
+                <label for="habits" class="form-label"
                   >Your Property Names</label
                 >
                 <div class="habits"></div>
-              </div>
-
-              <div class="mb-3">
-                <label for="dateProperty" class="form-label"
-                  >Your "Date" Property Name</label
-                >
-                <input
-                  type="text"
-                  class="form-control dateProperty"
-                  name="dateProperty"
-                />
-              </div>
-
-              <div class="mb-3">
-                <label for="completedProperty" class="form-label"
-                  >Your "Completed" Property Name</label
-                >
-                <input
-                  type="text"
-                  class="form-control completedProperty"
-                  name="completedProperty"
-                />
               </div>
 
               <h3>Chart Display</h3>
@@ -134,7 +112,7 @@
                 >
 
                 <% const defaultColor = newChartMode === 'lightMode' ? '#ffffff' : '#2f3437' %>
-                
+
                 <input
                   type="color"
                   name="chartBackground"
