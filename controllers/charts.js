@@ -7,14 +7,17 @@ module.exports = {
   getProfile: async (req, res) => {
     try {
       const charts = await Chart.find({ user: req.user.id });
-      res.render("profile.ejs", { charts: charts, user: req.user});
+      res.render("profile.ejs", { charts: charts, user: req.user });
     } catch (err) {
       console.log(err);
     }
   },
   getAddNewChart: async (req, res) => {
     try {
-      res.render("addNewChart.ejs", {user: req.user, newChartMode: req.params.chartMode });
+      res.render("addNewChart.ejs", {
+        user: req.user,
+        newChartMode: req.params.chartMode,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -32,28 +35,48 @@ module.exports = {
       const dbEntries = await Entry.find({ chartId: chartId });
 
       const today = new Date();
+      const dayOfWeek = today.getDay();
 
       const notion = new Client({
         auth: chart.integrationKey,
       });
 
+      if (dayOfWeek === "Monday") {
+        const data = await notion.databases.query({
+          database_id: databaseId,
+          filter: {
+            property: "Date",
+            date: {
+              past_week: {},
+            },
+          },
+          sorts: [
+            {
+              property: "Date",
+              direction: "ascending",
+            },
+          ],
+        });
+
+        let notionResults = data.results;
+        let notionEntries = getEntries(
+          notionResults,
+          numberOfHabits,
+          habitNames,
+          trackingName,
+          req.params.id
+        );
+
+        await Entry.insertMany(notionEntries);
+      }
+
       const data = await notion.databases.query({
         database_id: databaseId,
         filter: {
-          or: [
-            {
-              property: "Month",
-              select: {
-                equals: "November",
-              },
-            },
-            {
-              property: "Month",
-              select: {
-                equals: "October",
-              },
-            },
-          ],
+          property: "Date",
+          date: {
+            this_week: {},
+          },
         },
         sorts: [
           {
@@ -90,6 +113,7 @@ module.exports = {
       let habitNames = req.body.habitNames;
       let trackingName = req.body.trackingName.toLowerCase();
       let chartBackground = req.body.chartBackground;
+      let chartColor = req.body.chartColor;
 
       const newChart = await Chart.create({
         user: req.user.id,
@@ -106,13 +130,13 @@ module.exports = {
 
       const chartId = newChart._id;
 
-      // MANGO TEST DATE ONLY
-      const today = new Date("12/18/2024");
+      const today = new Date();
 
       const monthsBeforeToday = getMonthsBeforeToday(today);
       const currentMonth = today.toLocaleString("default", { month: "long" });
       const dayOfMonth = today.getDate();
 
+      // Send Notion entries for previous months
       for (let i = 0; i < monthsBeforeToday.length; i++) {
         const month = monthsBeforeToday[i];
 
@@ -153,24 +177,15 @@ module.exports = {
         auth: integrationKey,
       });
 
+      // Send Notion entries for current month
       if (dayOfMonth !== 1) {
         const dataForMonth = await notionForMonth.databases.query({
           database_id: databaseId,
           filter: {
-            and: [
-              {
-                property: "Month",
-                select: {
-                  equals: currentMonth,
-                },
-              },
-              {
-                property: "Date",
-                date: {
-                  before: today,
-                },
-              },
-            ],
+            property: "Month",
+            select: {
+              equals: currentMonth,
+            },
           },
           sorts: [
             {
@@ -197,7 +212,7 @@ module.exports = {
     } catch (err) {
       console.log(err);
     }
-  }
+  },
 };
 
 // ******** HELPER FUNCTIONS ********
@@ -214,9 +229,7 @@ function getEntries(
   notionResults.forEach((el) => {
     let prop = el.properties;
 
-    let percentage = Number(
-      prop["Completed"].formula.string.split("%")[0]
-    );
+    let percentage = Number(prop["Completed"].formula.string.split("%")[0]);
 
     let date = prop["Date"].date.start;
 
